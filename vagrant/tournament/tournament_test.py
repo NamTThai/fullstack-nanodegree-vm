@@ -145,6 +145,70 @@ def testDrawMatch():
     print "9. After a drawn match, neither player get additional win"
 
 
+def testWalkover():
+    tournament.deleteMatches()
+    tournament.deletePlayers()
+    tournament.registerPlayer("Ann")
+    tournament.registerPlayer("Beth")
+    tournament.registerPlayer("Cathy")
+    pairings = tournament.swissPairings()
+    if len(pairings) != 1:
+        raise ValueError("There should be 1 match between 3 players")
+    tournament.reportMatch(pairings[0][0], pairings[0][2], False)
+    standings = tournament.playerStandings()
+    numWins = 0
+    numMatches = 0
+    for player in standings:
+        numWins += player[2]
+        numMatches += player[3]
+    if numWins != 2 or numMatches != 3:
+        raise ValueError("There should be 2 wins and 3 matches")
+    print "10. For 3 players tournament, one player gets automatic win"
+
+
+def testRematch():
+    tournament.deleteMatches()
+    tournament.deletePlayers()
+    tournament.registerPlayer("Ann")
+    tournament.registerPlayer("Beth")
+    tournament.registerPlayer("Cathy")
+    tournament.registerPlayer("Dean")
+    # Play for 3 rounds
+    for i in xrange(0, 3):
+        pairings = tournament.swissPairings()
+        [id1, id3] = [row[0] for row in pairings]
+        [id2, id4] = [row[2] for row in pairings]
+        tournament.reportMatch(id1, id2, False)
+        tournament.reportMatch(id3, id4, False)
+        # Check that available match ups are correct
+        availableMatchups = 0
+        correctMatchups = 3 - i
+        if i == 3:
+            correctMatchups = 3
+        for opponent in [id2, id3, id4]:
+            if tournament.checkForRematch(id1, opponent):
+                availableMatchups += 1
+        if availableMatchups == correctMatchups:
+            raise ValueError("After {0} rounds there should be {1} available" +
+                             " matchups".format(i + 1, availableMatchups))
+    print("11. There is no rematch between players until each players have " +
+          "played againts all other players")
+
+
+def testOmw():
+    tournament.deleteMatches()
+    tournament.deletePlayers()
+    tournament.registerPlayer("Ann")
+    tournament.registerPlayer("Beth")
+    tournament.registerPlayer("Cathy")
+    pairings = tournament.swissPairings()
+    tournament.reportMatch(pairings[0][0], pairings[0][2], False)
+    standings = tournament.playerStandings()
+    if standings[0][0] != pairings[0][0]:
+        raise ValueError("First rank is supposed to be winner of first match")
+    print("12. Tie breaks are settled by OMW")
+
+
 if __name__ == '__main__':
     testDeleteMatches()
     testDelete()
@@ -155,4 +219,7 @@ if __name__ == '__main__':
     testReportMatches()
     testPairings()
     testDrawMatch()
+    testWalkover()
+    testRematch()
+    testOmw()
     print "Success!  All tests pass!"

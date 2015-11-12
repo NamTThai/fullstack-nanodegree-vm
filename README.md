@@ -27,3 +27,6 @@ This project provides functionalities to plan a [Swiss system tournament](https:
 
 ## Extra Features
 1. Draw is possible
+1. If there are odd number of players, one player will have automatic win each round (walkover). No two players' number of walkovers can be different by 2.
+1. There is no rematch between two players until both players have played against all other players
+1. When two players have the same number of wins, they are ranked according to OMW (Opponent Match Wins), the total number of wins by players they have played against

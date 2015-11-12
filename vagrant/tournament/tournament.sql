@@ -76,11 +76,50 @@ CREATE VIEW view_player_record AS
   UNION
   SELECT * FROM view_player_draw_record;
 
--- Player view that shows his/her number of won and matches
+-- Player view that shows his/her number of walkovers
+CREATE VIEW view_player_walkover AS
+  SELECT id, name,
+    (SELECT COUNT(*) FROM matches
+      WHERE matches.loser IS NULL and players.id = matches.winner
+    ) AS number_of_walkover
+    FROM players;
+
+-- Player view that shows his/her number of non-walkovers
+CREATE VIEW view_player_non_walkover AS
+  SELECT id, name,
+    (SELECT COUNT(*) FROM matches
+      WHERE matches.loser IS NOT NULL AND
+        (players.id = matches.winner OR players.id = matches.loser)
+    ) AS number_of_non_walkover
+    FROM players;
+
+-- Player view that show his/her possible matchup. This allows for battling againts oneself
+CREATE VIEW view_player_possible_matchup AS
+  SELECT A.id, A.name, B.id AS opponent FROM players AS A CROSS JOIN players AS B;
+
+-- Player view that show his/her opponents and number of times they match up and
+-- his/her opponent's omw (opponent match wins)
+CREATE VIEW view_player_versus AS
+  SELECT id, name, opponent,
+    (SELECT COUNT(*) FROM matches
+      WHERE (matches.winner = matchup.id AND matches.loser = matchup.opponent) OR
+      (matches.winner = matchup.opponent AND matches.loser = matchup.id)
+    ) AS number_of_matchup,
+    (SELECT COUNT(*) FROM view_player_win_record AS win
+      WHERE matchup.opponent = win.player_id) AS omw
+    FROM view_player_possible_matchup AS matchup
+    WHERE id != opponent;
+
+-- Player view that shows his/her number of won, omw (opponent match wins),
+-- non-walkover matches and total matches
 CREATE VIEW view_player_standing AS
   SELECT id, name,
     (SELECT COUNT(*) FROM view_player_win_record AS win
       WHERE players.id = win.player_id) AS number_of_win,
+    (SELECT SUM(omw) FROM view_player_versus AS versus
+      WHERE players.id = versus.id) AS omw,
+    (SELECT number_of_non_walkover FROM view_player_non_walkover AS walkover
+      WHERE walkover.id = players.id) AS number_of_non_walkover,
     (SELECT COUNT(*) FROM view_player_record AS total
       WHERE total.player_id = players.id) AS number_of_matches
-    FROM players
+    FROM players;
