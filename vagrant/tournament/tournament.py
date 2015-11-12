@@ -20,7 +20,10 @@ def checkForRematch(p1, p2):
     """
     connection = connect()
     cursor = connection.cursor()
-    cursor.execute("select number_of_matchup, (select min(number_of_matchup) from view_player_versus where id = %(p1)s) as min from view_player_versus where id = %(p1)s and opponent = %(p2)s", {"p1": p1, "p2": p2})
+    cursor.execute("select number_of_matchup, (select min(number_of_matchup) " +
+                   "from view_player_versus where id = %(p1)s) as min from " +
+                   "view_player_versus where id = %(p1)s and opponent = %(p2)s",
+                   {"p1": p1, "p2": p2})
     row = cursor.fetchone()
     connection.close()
     if row[0] > row[1]:
