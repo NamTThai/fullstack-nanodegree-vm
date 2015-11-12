@@ -71,10 +71,8 @@ def playerStandings():
     """
     connection = connect()
     cursor = connection.cursor()
-    cursor.execute("select id, name, (select count(*) from view_player_win" +
-                   "_record as win where players.id = win.player_id), (select" +
-                   " count(*) from view_player_record as total where total." +
-                   "player_id = players.id) from players")
+    cursor.execute("select id, name, number_of_win, number_of_matches from " +
+                   "view_player_standing order by number_of_win desc")
     rows = cursor.fetchall()
     connection.close()
     return rows
@@ -111,3 +109,15 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
+    connection = connect()
+    cursor = connection.cursor()
+    cursor.execute("select id, name from view_player_standing order by number_of_win")
+    player1 = cursor.fetchone()
+    player2 = cursor.fetchone()
+    pairings = []
+    while player1 is not None:
+        pairings.append(player1 + player2)
+        player1 = cursor.fetchone()
+        player2 = cursor.fetchone()
+    connection.close()
+    return pairings

@@ -75,3 +75,12 @@ CREATE VIEW view_player_record AS
   SELECT * FROM view_player_loss_record
   UNION
   SELECT * FROM view_player_draw_record;
+
+-- Player view that shows his/her number of won and matches
+CREATE VIEW view_player_standing AS
+  SELECT id, name,
+    (SELECT COUNT(*) FROM view_player_win_record AS win
+      WHERE players.id = win.player_id) AS number_of_win,
+    (SELECT COUNT(*) FROM view_player_record AS total
+      WHERE total.player_id = players.id) AS number_of_matches
+    FROM players
