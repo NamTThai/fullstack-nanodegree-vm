@@ -89,8 +89,8 @@ def testReportMatches():
     tournament.registerPlayer("Diane Grant")
     standings = tournament.playerStandings()
     [id1, id2, id3, id4] = [row[0] for row in standings]
-    tournament.reportMatch(id1, id2)
-    tournament.reportMatch(id3, id4)
+    tournament.reportMatch(id1, id2, False)
+    tournament.reportMatch(id3, id4, False)
     standings = tournament.playerStandings()
     for (i, n, w, m) in standings:
         if m != 1:
@@ -111,8 +111,8 @@ def testPairings():
     tournament.registerPlayer("Pinkie Pie")
     standings = tournament.playerStandings()
     [id1, id2, id3, id4] = [row[0] for row in standings]
-    tournament.reportMatch(id1, id2)
-    tournament.reportMatch(id3, id4)
+    tournament.reportMatch(id1, id2, False)
+    tournament.reportMatch(id3, id4, False)
     pairings = tournament.swissPairings()
     if len(pairings) != 2:
         raise ValueError(
@@ -126,6 +126,25 @@ def testPairings():
     print "8. After one match, players with one win are paired."
 
 
+def testDrawMatch():
+    tournament.deleteMatches()
+    tournament.deletePlayers()
+    tournament.registerPlayer("Ann")
+    tournament.registerPlayer("Beth")
+    standings = tournament.playerStandings()
+    [id1, id2] = [row[0] for row in standings]
+    tournament.reportMatch(id1, id2, True)
+    standings = tournament.playerStandings()
+    [(pid1, p1, pwin1, ptotal1), (pid2, p2, pwin2, ptotal2)] = standings
+    correct_result = set([frozenset([0, 1]), frozenset([0, 1])])
+    actual_result = set([frozenset([pwin1, ptotal1]), frozenset([pwin2, ptotal2])])
+    if correct_result != actual_result:
+        raise ValueError("Incorrect result after a drawn match")
+    [player1_total, player2_total] = [row[3] for row in standings]
+
+    print "9. After a drawn match, neither player get additional win"
+
+
 if __name__ == '__main__':
     testDeleteMatches()
     testDelete()
@@ -135,4 +154,5 @@ if __name__ == '__main__':
     testStandingsBeforeMatches()
     testReportMatches()
     testPairings()
+    testDrawMatch()
     print "Success!  All tests pass!"

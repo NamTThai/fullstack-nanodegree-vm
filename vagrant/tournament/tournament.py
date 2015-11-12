@@ -78,18 +78,19 @@ def playerStandings():
     return rows
 
 
-def reportMatch(winner, loser):
+def reportMatch(winner, loser, draw):
     """Records the outcome of a single match between two players.
 
     Args:
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
+      draw:  whether the match is a draw
     """
     connection = connect()
     cursor = connection.cursor()
-    cursor.execute("insert into matches (winner, loser) values " +
-                   "(%(winner)s, %(loser)s)",
-                   {"winner": winner, "loser": loser})
+    cursor.execute("insert into matches (winner, loser, draw_flag) values " +
+                   "(%(winner)s, %(loser)s, %(draw)s)",
+                   {"winner": winner, "loser": loser, "draw": draw})
     connection.commit()
     connection.close()
 
