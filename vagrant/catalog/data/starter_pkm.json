@@ -1,0 +1,258 @@
+[
+  {
+    "name": "Happiny",
+    "type": "Normal",
+    "description": "It carefully carries a round, white rock that it thinks is an egg. It's bothered by how curly its hair looks.",
+    "img_url": "http://www.serebii.net/xy/pokemon/440.png"
+  }, {
+    "name": "Chansey",
+    "type": "Normal",
+    "description": "Chansey lays nutritionally excellent eggs on an everyday basis. The eggs are so delicious, they are easily and eagerly devoured by even those people who have lost their appetite.",
+    "img_url": "http://www.serebii.net/xy/pokemon/113.png"
+  }, {
+    "name": "Blissey",
+    "type": "Normal",
+    "description": "Blissey senses sadness with its fluffy coat of fur. If it does so, this Pokémon will rush over to a sad person, no matter how far away, to share a Lucky Egg that brings a smile to any face.",
+    "img_url": "http://www.serebii.net/xy/pokemon/242.png"
+  }, {
+    "name": "Cindaquil",
+    "type": "Fire",
+    "description": "Cyndaquil protects itself by flaring up the flames on its back. The flames are vigorous if the Pokémon is angry. However, if it is tired, the flames splutter fitfully with incomplete combustion.",
+    "img_url": "http://www.serebii.net/xy/pokemon/155.png"
+  }, {
+    "name": "Quilava",
+    "type": "Fire",
+    "description": "Quilava keeps its foes at bay with the intensity of its flames and gusts of superheated air. This Pokémon applies its outstanding nimbleness to dodge attacks even while scorching the foe with flames.",
+    "img_url": "http://www.serebii.net/xy/pokemon/156.png"
+  }, {
+    "name": "Typhlosion",
+    "type": "Fire",
+    "description": "Typhlosion obscures itself behind a shimmering heat haze that it creates using its intensely hot flames. This Pokémon creates blazing explosive blasts that burn everything to cinders.",
+    "img_url": "http://www.serebii.net/xy/pokemon/157.png"
+  }, {
+    "name": "Poliwag",
+    "type": "Water",
+    "description": "Poliwag has a very thin skin. It is possible to see the Pokémon's spiral innards right through the skin. Despite its thinness, however, the skin is also very flexible. Even sharp fangs bounce right off it.",
+    "img_url": "http://www.serebii.net/xy/pokemon/060.png"
+  }, {
+    "name": "Poliwhirl",
+    "type": "Water",
+    "description": "The surface of Poliwhirl's body is always wet and slick with a slimy fluid. Because of this slippery covering, it can easily slip and slide out of the clutches of any enemy in battle.",
+    "img_url": "http://www.serebii.net/xy/pokemon/061.png"
+  }, {
+    "name": "Politoed",
+    "type": "Water",
+    "description": "The curled hair on Politoed's head is proof of its status as a king. It is said that the longer and more curled the hair, the more respect this Pokémon earns from its peers.",
+    "img_url": "http://www.serebii.net/xy/pokemon/186.png"
+  }, {
+    "name": "Snivy",
+    "type": "Grass",
+    "description": "They photosynthesize by bathing their tails in sunlight. When they are not feeling well, their tails droop.",
+    "img_url": "http://www.serebii.net/xy/pokemon/495.png"
+  }, {
+    "name": "Servine",
+    "type": "Grass",
+    "description": "When it gets dirty, its leaves can't be used in photosynthesis, so it always keeps itself clean.",
+    "img_url": "http://www.serebii.net/xy/pokemon/496.png"
+  }, {
+    "name": "Serperior",
+    "type": "Grass",
+    "description": "It can stop its opponents' movements with just a glare. It takes in solar energy and boosts it internally.",
+    "img_url": "http://www.serebii.net/xy/pokemon/497.png"
+  }, {
+    "name": "Mareep",
+    "type": "Electric",
+    "description": "Mareep's fluffy coat of wool rubs together and builds a static charge. The more static electricity is charged, the more brightly the lightbulb at the tip of its tail glows.",
+    "img_url": "http://www.serebii.net/xy/pokemon/179.png"
+  }, {
+    "name": "Flaaffy",
+    "type": "Electric",
+    "description": "Flaaffy's wool quality changes so that it can generate a high amount of static electricity with a small amount of wool. The bare and slick parts of its hide are shielded against electricity.",
+    "img_url": "http://www.serebii.net/xy/pokemon/180.png"
+  }, {
+    "name": "Ampharos",
+    "type": "Electric",
+    "description": "Ampharos gives off so much light that it can be seen even from space. People in the old days used the light of this Pokémon to send signals back and forth with others far away.",
+    "img_url": "http://www.serebii.net/xy/pokemon/181.png"
+  }, {
+    "name": "Vanillite",
+    "type": "Ice",
+    "description": "The temperature of their breath is -58 degrees Fahrenheit. They create snow crystals and make snow fall in the areas around them.",
+    "img_url": "http://www.serebii.net/xy/pokemon/582.png"
+  }, {
+    "name": "Vanillish",
+    "type": "Ice",
+    "description": "Snowy mountains are this Pokémon's habitat. During an ancient ice age, they moved to southern areas.",
+    "img_url": "http://www.serebii.net/xy/pokemon/583.png"
+  }, {
+    "name": "Vanilluxe",
+    "type": "Ice",
+    "description": "Swallowing large amounts of water, they make snow clouds inside their bodies and, when angry, cause violent blizzards.",
+    "img_url": "http://www.serebii.net/xy/pokemon/584.png"
+  }, {
+    "name": "Hitmonlee",
+    "type": "Fighting",
+    "description": "Hitmonlee's legs freely contract and stretch. Using these springlike legs, it bowls over foes with devastating kicks. After battle, it rubs down its legs and loosens the muscles to overcome fatigue.",
+    "img_url": "http://www.serebii.net/xy/pokemon/106.png"
+  }, {
+    "name": "Hitmonchan",
+    "type": "Fighting",
+    "description": "Hitmonchan is said to possess the spirit of a boxer who had been working toward a world championship. This Pokémon has an indomitable spirit and will never give up in the face of adversity.",
+    "img_url": "http://www.serebii.net/xy/pokemon/107.png"
+  }, {
+    "name": "Hitmontop",
+    "type": "Fighting",
+    "description": "Hitmontop spins on its head at high speed, all the while delivering kicks. This technique is a remarkable mix of both offense and defense at the same time. The Pokémon travels faster spinning than it does walking.",
+    "img_url": "http://www.serebii.net/xy/pokemon/237.png"
+  }, {
+    "name": "Ekans",
+    "type": "Poison",
+    "description": "Ekans curls itself up in a spiral while it rests. Assuming this position allows it to quickly respond to a threat from any direction with a glare from its upraised head.",
+    "img_url": "http://www.serebii.net/xy/pokemon/023.png"
+  }, {
+    "name": "Arbok",
+    "type": "Poison",
+    "description": "This Pokémon is terrifically strong in order to constrict things with its body. It can even flatten steel oil drums. Once Arbok wraps its body around its foe, escaping its crunching embrace is impossible.",
+    "img_url": "http://www.serebii.net/xy/pokemon/024.png"
+  }, {
+    "name": "Sevipor",
+    "type": "Poison",
+    "description": "Seviper's swordlike tail serves two purposes-it slashes foes and douses them with secreted poison. This Pokémon will not give up its long-running blood feud with Zangoose.",
+    "img_url": "http://www.serebii.net/xy/pokemon/336.png"
+  }, {
+    "name": "Roggenrola",
+    "type": "Rock",
+    "description": "They were discovered a hundred years ago in an earthquake fissure. Inside each one is an energy core.",
+    "img_url": "http://www.serebii.net/xy/pokemon/524.png"
+  }, {
+    "name": "Boldore",
+    "type": "Rock",
+    "description": "When it is healthy, its core sticks out. Always facing the same way, it swiftly moves front to back and left to right.",
+    "img_url": "http://www.serebii.net/xy/pokemon/525.png"
+  }, {
+    "name": "Gigalith",
+    "type": "Rock",
+    "description": "Compressing the energy from its internal core lets it fire off an attack capable of blowing away a mountain.",
+    "img_url": "http://www.serebii.net/xy/pokemon/526.png"
+  }, {
+    "name": "Tornadus",
+    "type": "Flying",
+    "description": "In every direction it flies, creating winds so powerful, they blow everything away.",
+    "img_url": "http://www.serebii.net/xy/pokemon/641.png"
+  }, {
+    "name": "Tornadus-Therian",
+    "type": "Flying",
+    "description": "Tornadus expels massive energy from its tail, causing severe storms. Its power is great enough to blow houses away.",
+    "img_url": "http://www.serebii.net/xy/pokemon/641-s.png"
+  }, {
+    "name": "Abra",
+    "type": "Psychic",
+    "description": "Abra needs to sleep for eighteen hours a day. If it doesn't, this Pokémon loses its ability to use telekinetic powers. If it is attacked, Abra escapes using Teleport while it is still sleeping.",
+    "img_url": "http://www.serebii.net/xy/pokemon/063.png"
+  }, {
+    "name": "Kadabra",
+    "type": "Psychic",
+    "description": "Kadabra holds a silver spoon in its hand. The spoon is used to amplify the alpha waves in its brain. Without the spoon, the Pokémon is said to be limited to half the usual amount of its telekinetic powers.",
+    "img_url": "http://www.serebii.net/xy/pokemon/064.png"
+  }, {
+    "name": "Alakazam",
+    "type": "Psychic",
+    "description": "Alakazam's brain continually grows, infinitely multiplying brain cells. This amazing brain gives this Pokémon an astoundingly high IQ of 5,000. It has a thorough memory of everything that has occurred in the world.",
+    "img_url": "http://www.serebii.net/xy/pokemon/065.png"
+  }, {
+    "name": "Wurmple",
+    "type": "Bug",
+    "description": "Wurmple is targeted by Swellow as prey. This Pokémon will try to resist by pointing the spikes on its rear at the attacking predator. It will weaken the foe by leaking poison from the spikes.",
+    "img_url": "http://www.serebii.net/xy/pokemon/265.png"
+  }, {
+    "name": "Silcoon",
+    "type": "Bug",
+    "description": "Silcoon was thought to endure hunger and not consume anything before its evolution. However, it is now thought that this Pokémon slakes its thirst by drinking rainwater that collects on its silk.",
+    "img_url": "http://www.serebii.net/xy/pokemon/266.png"
+  }, {
+    "name": "Cascoon",
+    "type": "Bug",
+    "description": "If it is attacked, Cascoon remains motionless however badly it may be hurt. It does so because if it were to move, its body would be weak upon evolution. This Pokémon will also not forget the pain it endured.",
+    "img_url": "http://www.serebii.net/xy/pokemon/268.png"
+  }, {
+    "name": "Phanpy",
+    "type": "Ground",
+    "description": "Phanpy uses its long nose to shower itself. When others gather around, they thoroughly douse each other with water. These Pokémon can be seen drying their soaking-wet bodies at the edge of water.",
+    "img_url": "http://www.serebii.net/xy/pokemon/231.png"
+  }, {
+    "name": "Donphan",
+    "type": "Ground",
+    "description": "If Donphan were to tackle with its hard body, even a house could be destroyed. Using its massive strength, the Pokémon helps clear rock and mud slides that block mountain trails.",
+    "img_url": "http://www.serebii.net/xy/pokemon/232.png"
+  }, {
+    "name": "Duskull",
+    "type": "Ghost",
+    "description": "Duskull wanders lost among the deep darkness of midnight. There is an oft-told admonishment given to misbehaving children that this Pokémon will spirit away bad children who earn scoldings from their mothers.",
+    "img_url": "http://www.serebii.net/xy/pokemon/355.png"
+  }, {
+    "name": "Dusclops",
+    "type": "Ghost",
+    "description": "Dusclops absorbs anything, however large the object may be. This Pokémon hypnotizes its foe by waving its hands in a macabre manner and by bringing its single eye to bear. The hypnotized foe is made to do Dusclops's bidding.",
+    "img_url": "http://www.serebii.net/xy/pokemon/356.png"
+  }, {
+    "name": "Dusknoir",
+    "type": "Ghost",
+    "description": "The antenna on its head captures radio waves from the world of spirits that command it to take people there.",
+    "img_url": "http://www.serebii.net/xy/pokemon/477.png"
+  }, {
+    "name": "Purrloin",
+    "type": "Dark",
+    "description": "Their cute act is a ruse. They trick people and steal their valuables just to see the looks on their faces.",
+    "img_url": "http://www.serebii.net/xy/pokemon/509.png"
+  }, {
+    "name": "Liepard",
+    "type": "Dark",
+    "description": "Their beautiful form comes from the muscles they have developed. They run silently in the night.",
+    "img_url": "http://www.serebii.net/xy/pokemon/510.png"
+  }, {
+    "name": "Goomy",
+    "type": "Dragon",
+    "description": "It's covered in a slimy membrane that makes any punches or kicks slide off it harmlessly.",
+    "img_url": "http://www.serebii.net/xy/pokemon/704.png"
+  }, {
+    "name": "Sliggoo",
+    "type": "Dragon",
+    "description": "Its four horns are a high-performance radar system. It uses them to sense sounds and smells, rather than using ears or a nose.",
+    "img_url": "http://www.serebii.net/xy/pokemon/705.png"
+  }, {
+    "name": "Goodra",
+    "type": "Dragon",
+    "description": "It attacks with retractable horns. It throws a punch that's the equivalent of the force of a hundred pro boxers.",
+    "img_url": "http://www.serebii.net/xy/pokemon/706.png"
+  }, {
+    "name": "Klink",
+    "type": "Steel",
+    "description": "Two bodies comprise a fixed pair. They spin around each other to generate electricity.",
+    "img_url": "http://www.serebii.net/xy/pokemon/599.png"
+  }, {
+    "name": "Klang",
+    "type": "Steel",
+    "description": "A minigear and big gear comprise its body. If the minigear it luanches at a foe doesn't return, it will die.",
+    "img_url": "http://www.serebii.net/xy/pokemon/600.png"
+  }, {
+    "name": "Klinklang",
+    "type": "Steel",
+    "description": "The minigear spins at high speed. Then energy from the red core charges the minigear to make it ready to fire.",
+    "img_url": "http://www.serebii.net/xy/pokemon/601.png"
+  }, {
+    "name": "Cleffa",
+    "type": "Fairy",
+    "description": "On nights with many shooting stars, Cleffa can be seen dancing in a ring. They dance through the night and stop only at the break of day, when these Pokémon quench their thirst with the morning dew.",
+    "img_url": "http://www.serebii.net/xy/pokemon/173.png"
+  }, {
+    "name": "Clefairy",
+    "type": "Fairy",
+    "description": "On every night of a full moon, groups of this Pokémon come out to play. When dawn arrives, the tired Clefairy return to their quiet mountain retreats and go to sleep nestled up against each other.",
+    "img_url": "http://www.serebii.net/xy/pokemon/035.png"
+  }, {
+    "name": "Clefable",
+    "type": "Fairy",
+    "description": "Clefable moves by skipping lightly as if it were flying using its wings. Its bouncy step lets it even walk on water. It is known to take strolls on lakes on quiet, moonlit nights.",
+    "img_url": "http://www.serebii.net/xy/pokemon/036.png"
+  }
+]

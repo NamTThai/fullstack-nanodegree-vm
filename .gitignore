@@ -1,5 +1,3 @@
-vagrant/.vagrant
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -51,6 +49,12 @@ coverage.xml
 *.mo
 *.pot
 
+# Vagrant files:
+vagrant/.vagrant
+
+# SQLite db files:
+*.db
+
 # Django stuff:
 *.log
 
@@ -59,3 +63,6 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Bower components:
+bower_components/

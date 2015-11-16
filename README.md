@@ -3,7 +3,7 @@ FullStack Nanodegree Projects
 
 This repository sets up a virtual machine to run code for 2 projects: Tournament Planner and Item Catalog
 
-## How to power up the virtual machine
+## How to power up a virtual machine
 
 1. Download and install [Python ~2](https://www.python.org/downloads/)
 1. Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
@@ -13,4 +13,4 @@ This repository sets up a virtual machine to run code for 2 projects: Tournament
 
 ## Projects
 1. [Tournament Planner Project](vagrant/tournament) provides functionalities to plan a [Swiss system tournament](https://en.wikipedia.org/wiki/Swiss-system_tournament)
-1. [Item Catalog Project](vagrant/catalog)
+1. [Pokemon Catalog Project](vagrant/catalog)
