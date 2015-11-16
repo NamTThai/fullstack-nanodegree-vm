@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship, sessionmaker, backref
 from sqlalchemy.sql import func
 from sqlalchemy import create_engine
 import json
+import string
 
 Base = declarative_base()
 
@@ -42,6 +43,21 @@ class Pokemon(Base):
     img_url = Column(String(250))
     date_entered = Column(DateTime, default=func.now())
     type = relationship(Type)
+
+    def getIconUrl(self):
+        if string.find(self.img_url, "serebii") > -1:
+            self.icon_url = string.replace(self.img_url, "xy/pokemon", "pokedex-xy/icon")
+        else:
+            self.icon_url = self.img_url
+        return self.icon_url
+
+    def getJSON(self):
+        return json.dumps({
+            "name": self.name,
+            "type": self.type.name,
+            "description": self.description,
+            "img_url": self.img_url
+        })
 
 
 engine = create_engine('sqlite:///catalog.db')

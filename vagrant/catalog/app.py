@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify
 from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
 from db_setup import Base, Type, Pokemon
+import json
 
 app = Flask(__name__, static_url_path='')
 
@@ -51,6 +52,19 @@ def mainRender(route):
     latestEntries = session.query(Pokemon).order_by(desc(Pokemon.date_entered)).limit(20)
     return render_template(
         'index.html', types=types, latestEntries=latestEntries, route=route)
+
+
+@app.route('/pokemon')
+def pokemonInfo():
+    pokemonId = request.args.get('id')
+    if pokemonId is None:
+        return json.dumps({"error": "No pokemon ID specified"}), 404
+    else:
+        pokemons = session.query(Pokemon).filter_by(id=pokemonId).all()
+        if (len(pokemons) != 1):
+            return json.dumps({"error": "No pokemon ID specified"}), 404
+        else:
+            return json.dumps({"pokemon": pokemons[0].getJSON()})
 
 
 @app.route('/Types/<int:Type_id>/new', methods=['GET', 'POST'])

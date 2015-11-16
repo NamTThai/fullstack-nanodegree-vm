@@ -6,6 +6,22 @@ body {
   font-size: 1.1em;
 }
 
+.entry:hover {
+  background-color: #BBDEFB;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 600px;
+}
+
 .category {
   font-style: italic;
+}
+
+td {
+  padding: 0 24px 0 24px;
 }

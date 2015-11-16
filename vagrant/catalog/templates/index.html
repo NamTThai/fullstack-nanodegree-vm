@@ -19,7 +19,10 @@
 
   <!-- Components, Styles and Scripts import -->
   <link rel="import" href="bower_components/iron-icons/iron-icons.html">
+  <link rel="import" href="bower_components/iron-image/iron-image.html">
   <link rel="import" href="bower_components/iron-pages/iron-pages.html">
+  <link rel="import" href="bower_components/neon-animation/neon-animation.html">
+  <link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
   <link rel="import" href="bower_components/paper-drawer-panel/paper-drawer-panel.html">
   <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
   <link rel="import" href="bower_components/paper-item/paper-item.html">
@@ -30,6 +33,7 @@
   <link rel="stylesheet" href="css/fw-layout.css">
   <link rel="stylesheet" href="css/fw-template.css">
   <link rel="import" href="css/custom-style.html">
+  <link rel="import" href="components/pokemon-info.html">
   <script src="js/event-listener.js"></script>
   <script src="js/ready.js"></script>
 
@@ -63,26 +67,43 @@
               <paper-toolbar class="drawer-toolbar">
                 <span class="toolbar-header">Latest Entries</span>
               </paper-toolbar>
-              <paper-menu>
+              <table>
                 {% for entry in latestEntries %}
-                <paper-item class="pointer">
-                  <span class="entry">{{entry.name}}</span>&nbsp;
-                  <span class="entry category">({{entry.type.name}})</span>
-                </paper-item>
+                <tr class="pointer entry" pokemon-id="{{entry.id}}" on-click="eShowPokemon">
+                  <td>
+                    <iron-image sizing="cover" src="{{entry.getIconUrl()}}" preload fade width=48 height=48></iron-image>
+                  </td>
+                  <td>{{entry.name}}</td>
+                  <td>{{entry.type.name}}</td>
+                  <td class="overflow-hidden">{{entry.description}}</td>
+                </tr>
                 {% endfor %}
-              </paper-menu>
+              </table>
             </section>
             {% for i in types %}
             <section data-route="{{i.name}}">
               <paper-toolbar class="drawer-toolbar">
-                <span class="toolbar-header">{{i.name}} Type ({{i.pokemons}} Pokemons)</span>
+                <span class="toolbar-header">{{i.name}} Type ({{i.pokemons|length}} Pokemons)</span>
               </paper-toolbar>
+              <table>
+                {% for pokemon in i.pokemons %}
+                <tr class="pointer entry" pokemon-id="{{pokemon.id}}" on-click="eShowPokemon">
+                  <td>
+                    <iron-image sizing="cover" src="{{pokemon.getIconUrl()}}" preload fade width=48 height=48></iron-image>
+                  </td>
+                  <td>{{pokemon.name}}</td>
+                  <td>{{pokemon.type.name}}</td>
+                  <td class="overflow-hidden">{{pokemon.description}}</td>
+                </tr>
+                {% endfor %}
+              </table>
             </section>
             {% endfor %}
           </iron-pages>
         </div>
       </paper-scroll-header-panel>
     </paper-drawer-panel>
+    <pokemon-info></pokemon-info>
   </template>
 </body>
 </html>

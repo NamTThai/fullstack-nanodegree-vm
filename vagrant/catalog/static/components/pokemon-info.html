@@ -1,0 +1,60 @@
+<dom-module id="pokemon-info">
+  <style>
+    paper-dialog {
+      max-width: 500px;
+    }
+
+    .type {
+      padding: 0 0 0 12px;
+      font-style: italic;
+    }
+  </style>
+
+  <template>
+    <paper-dialog id="dialog" modal entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+      <iron-pages attr-for-selected="data-route" selected="{{selected}}">
+        <section data-route="info">
+          <div class="row">
+            <h3>{{pokemon.name}}</h3>
+            <span class="type">({{pokemon.type}})</span>
+          </div>
+          <div class="row">
+            <iron-image class="col-4" sizing="contain" src="{{pokemon.img_url}}" preload fade width=120 height=120></iron-image>
+            <div class="col-8">{{pokemon.description}}</div>
+          </div>
+        </section>
+        <section data-route="error">
+          <div>Nothing Found!</div>
+        </section>
+        <section data-route="delete">
+
+        </section>
+        <section data-route="update">
+
+        </section>
+        <section data-route="add">
+
+        </section>
+      </iron-pages>
+    </paper-dialog>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: "pokemon-info",
+
+    properties: {
+      pokemon: Object,
+
+      selected: {
+        type: String,
+        value: "info"
+      }
+    },
+
+    open: function() {
+      this.$.dialog.open();
+    }
+  });
+</script>

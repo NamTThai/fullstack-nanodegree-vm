@@ -28,4 +28,26 @@ document.addEventListener("WebComponentsReady", function() {
     Polymer.Base.transform('scale(' + scaleBottom + ') translateZ(0)', bottomContainer);
     Polymer.Base.transform('scale(' + scaleMiddle + ') translateZ(0)', appName);
   };
+
+  eventListener.eShowPokemon = function(event) {
+    var pokemonId = $(event.target).closest("tr").attr("pokemon-id");
+    var dialog = document.querySelector("pokemon-info");
+    $.ajax("/pokemon", {
+      method: "GET",
+      data: {
+        id: pokemonId
+      },
+
+      success: function(data) {
+        dialog.selected = "info";
+        dialog.pokemon = JSON.parse(JSON.parse(data).pokemon);
+        dialog.open();
+      },
+
+      error: function(error) {
+        dialog.selected = "error";
+        dialog.open();
+      }
+    });
+  };
 });
