@@ -58,18 +58,20 @@
             <paper-icon-button icon="arrow-back" on-click="eInfo"></paper-icon-button>
             <h3>Update Pokemon</h3>
             <span class="flex"></span>
-            <paper-icon-button icon="save"></paper-icon-button>
+            <paper-icon-button icon="save" on-click="eRequestUpdate"></paper-icon-button>
           </div>
-          <paper-input label="Name" value="[[pokemon.name]]"></paper-input>
-          <paper-dropdown-menu label="Type">
-            <paper-menu class="dropdown-content" attr-for-selected="type" selected="[[pokemon.type]]">
-              <template is="dom-repeat" items="[[types]]">
-                <paper-item type="[[item]]">[[item]]</paper-item>
-              </template>
-            </paper-menu>
-          </paper-dropdown-menu>
-          <paper-input label="Image URL" value="[[pokemon.img_url]]"></paper-input>
-          <paper-textarea label="Description" value="[[pokemon.description]]"></paper-textarea>
+          <form id="updateForm" is="iron-form" method="post">
+            <paper-input name="name" label="Name" value="[[pokemon.name]]"></paper-input>
+            <paper-dropdown-menu name="type" label="Type">
+              <paper-menu class="dropdown-content" attr-for-selected="type" selected="[[pokemon.type]]">
+                <template is="dom-repeat" items="[[types]]">
+                  <paper-item type="[[item]]">[[item]]</paper-item>
+                </template>
+              </paper-menu>
+            </paper-dropdown-menu>
+            <paper-input name="img_url" label="Image URL" value="[[pokemon.img_url]]"></paper-input>
+            <paper-textarea name="description" label="Description" value="[[pokemon.description]]"></paper-textarea>
+          </form>
         </section>
 
         <section data-route="add">
@@ -136,6 +138,41 @@
         error: function(error) {
           polymer.selected = "error";
           polymer.error = error.message;
+        }
+      });
+    },
+
+    eRequestUpdate: function() {
+      var data = this.$.updateForm.serialize();
+      data.id = this.pokemon.id;
+      var polymer = this;
+      $.ajax("/modify", {
+        method: "POST",
+        data: data,
+        success: function(data) {
+          polymer.pokemon = data.pokemon;
+          polymer.selected = "info";
+          var displayRows = document.querySelectorAll('tr[pokemon-id="' + data.pokemon.id + '"]');
+          for (var i = 0; i < displayRows.length; i++) {
+            var row = displayRows[i];
+            var cells = row.querySelectorAll("td");
+            var oldType = $(cells[2]).html();
+            var newType = data.pokemon.type;
+            $(cells[0].querySelector("iron-image")).attr("src", data.pokemon.img_url);
+            $(cells[1]).html(data.pokemon.name);
+            $(cells[2]).html(newType);
+            $(cells[3]).html(data.pokemon.description);
+            if (oldType != newType && $(row).closest("section").attr("data-route") != "latest_item") {
+              row.parentNode.removeChild(row);
+              var section = $('section[data-route="' + newType + '"]');
+              section.children('table').append(row);
+            }
+          }
+        },
+
+        error: function(error) {
+          polymer.selected = "error";
+          polymer.error = JSON.stringify(error);
         }
       });
     },

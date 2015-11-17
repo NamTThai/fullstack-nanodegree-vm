@@ -62,6 +62,18 @@ def modify():
         session.delete(pokemon)
         session.commit()
         return jsonify(id=pokemonId)
+    elif request.method == 'POST':
+        pokemonId = request.form['id']
+        pokemon = session.query(Pokemon).filter_by(id=pokemonId).one()
+        pokemon.name = request.form['name']
+        type = request.form['type']
+        typeId = session.query(Type).filter_by(name=type).one().id
+        pokemon.type_id = typeId
+        pokemon.img_url = request.form['img_url']
+        pokemon.description = request.form['description']
+        session.add(pokemon)
+        session.commit()
+        return jsonify(pokemon=pokemon.getJSON())
 
 
 @app.route('/v1/pokemon')
