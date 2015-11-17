@@ -23,6 +23,19 @@ class Type(Base):
     pokemons = relationship('Pokemon')
 
 
+class User(Base):
+    """Store email address of Pokemon Entry's creator
+
+    Args:
+        id: user id
+        email: user email
+    """
+
+    __tablename__ = 'user'
+    id = Column(Integer, primary_key=True)
+    email = Column(String(80), nullable=False)
+
+
 class Pokemon(Base):
     """Pokemon information
 
@@ -31,6 +44,7 @@ class Pokemon(Base):
         name: item name
         category_id:  corresponding category
         description:  item description
+        user_id:  id of entry creator, can be null if the entry is automatically generated
         date_entered:  when the item was entered, default to insertion time
 
     """
@@ -41,8 +55,10 @@ class Pokemon(Base):
     type_id = Column(Integer, ForeignKey('type.id'), nullable=False)
     description = Column(String(250))
     img_url = Column(String(250))
+    user_id = Column(Integer, ForeignKey('user.id'))
     date_entered = Column(DateTime, default=func.now())
     type = relationship(Type)
+    user = relationship(User)
 
     def getIconUrl(self):
         if string.find(self.img_url, "serebii") > -1:
@@ -57,8 +73,15 @@ class Pokemon(Base):
             "name": self.name,
             "type": self.type.name,
             "description": self.description,
-            "img_url": self.img_url
+            "img_url": self.img_url,
+            "user_email": self.getUserEmail()
         }
+
+    def getUserEmail(self):
+        if self.user is None:
+            return None
+        else:
+            return self.user.email
 
 
 engine = create_engine('sqlite:///catalog.db')

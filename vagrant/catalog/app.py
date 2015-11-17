@@ -4,7 +4,7 @@ import random
 import string
 from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
-from db_setup import Base, Type, Pokemon
+from db_setup import Base, Type, Pokemon, User
 import urllib2
 from datetime import datetime
 import httplib2
@@ -73,30 +73,43 @@ def verifyAccessToken(state, access_token, user_id):
 
 @app.route('/modify', methods=['DELETE', 'PUT', 'POST'])
 def modify():
+    user_email = request.form['user_email']
+    user = session.query(User).filter_by(email=user_email).first()
+    if user is None:
+        user = User(email=user_email)
+        session.add(user)
+        session.commit()
+        print(user.id)
     if not verifyAccessToken(request.form['state'], request.form['access_token'], request.form['user_id']):
         return jsonify(message="Unable to verify user login information"), 400
     elif request.method == 'DELETE':
         pokemonId = request.form['id']
-        pokemon = session.query(Pokemon).filter_by(id=pokemonId).one()
-        session.delete(pokemon)
-        session.commit()
-        return jsonify(id=pokemonId)
+        pokemon = session.query(Pokemon).filter_by(id=pokemonId, user_id=user.id).first()
+        if pokemon is not None:
+            session.delete(pokemon)
+            session.commit()
+            return jsonify(id=pokemonId)
+        else:
+            return jsonify(message="Either that Pokemon does not exists, or you don't have the permission to delete this pokemon"), 400
     elif request.method == 'POST':
         img_url = request.form['img_url']
         if not verifyImage(img_url):
             return jsonify(message="Invalid Image URL or Image Type, "
                            "Pokedex only accepts jpg, png or gif"), 400
         pokemonId = request.form['id']
-        pokemon = session.query(Pokemon).filter_by(id=pokemonId).one()
-        pokemon.name = request.form['name']
-        type = request.form['type']
-        typeId = session.query(Type).filter_by(name=type).one().id
-        pokemon.type_id = typeId
-        pokemon.img_url = img_url
-        pokemon.description = request.form['description']
-        session.add(pokemon)
-        session.commit()
-        return jsonify(pokemon=pokemon.getJSON())
+        pokemon = session.query(Pokemon).filter_by(id=pokemonId, user_id=user.id).first()
+        if pokemon is not None:
+            pokemon.name = request.form['name']
+            type = request.form['type']
+            typeId = session.query(Type).filter_by(name=type).one().id
+            pokemon.type_id = typeId
+            pokemon.img_url = img_url
+            pokemon.description = request.form['description']
+            session.add(pokemon)
+            session.commit()
+            return jsonify(pokemon=pokemon.getJSON())
+        else:
+            return jsonify(message="Either that Pokemon does not exists, or you don't have the permission to update this pokemon"), 400
     else:
         img_url = request.form['img_url']
         isImage = verifyImage(img_url)
@@ -104,9 +117,8 @@ def modify():
             return jsonify(message="Invalid Image URL or Image Type, "
                            "Pokedex only accepts jpg, png or gif"), 400
 
-        type = request.form['type']
-        typeId = session.query(Type).filter_by(name=type).one()
-        newPokemon = Pokemon(name=request.form['name'], type=typeId,
+        type = session.query(Type).filter_by(name=request.form['type']).one()
+        newPokemon = Pokemon(name=request.form['name'], type=type, user_id=user.id,
                              img_url=img_url, description=request.form['description'])
         session.add(newPokemon)
         session.commit()
@@ -129,14 +141,18 @@ def verifyImage(img_url):
 @app.route('/v1/pokemon')
 def pokemonInfo():
     pokemonId = request.args.get('id')
+    user_email = request.args.get('user_email')
     if pokemonId is None:
         return jsonify(message="No pokemon ID specified"), 404
     else:
-        pokemons = session.query(Pokemon).filter_by(id=pokemonId).all()
-        if (len(pokemons) != 1):
+        pokemon = session.query(Pokemon).filter_by(id=pokemonId).first()
+        if pokemon is None:
             return jsonify(message="Nothing found"), 404
         else:
-            return jsonify(pokemon=pokemons[0].getJSON())
+            if pokemon.user is not None and pokemon.user.email == user_email:
+                return jsonify(pokemon=pokemon.getJSON(), authorized=True)
+            else:
+                return jsonify(pokemon=pokemon.getJSON())
 
 
 @app.route('/v1/types')

@@ -22,8 +22,10 @@
             <h3>{{pokemon.name}}</h3>
             <span class="type">({{pokemon.type}})</span>
             <span class="flex"></span>
-            <paper-icon-button icon="create" on-click="eUpdate"></paper-icon-button>
-            <paper-icon-button icon="clear" on-click="eDelete"></paper-icon-button>
+            <template is="dom-if" if=[[authorized]]>
+              <paper-icon-button icon="create" on-click="eUpdate"></paper-icon-button>
+              <paper-icon-button icon="clear" on-click="eDelete"></paper-icon-button>
+            </template>
           </div>
           <div class="row">
             <iron-image class="col-4" sizing="contain" src="{{pokemon.img_url}}" preload fade width=120 height=120></iron-image>
@@ -113,6 +115,11 @@
     },
 
     properties: {
+      authorized: {
+        type: Boolean,
+        value: false
+      },
+
       defaultType: String,
 
       pokemon: Object,

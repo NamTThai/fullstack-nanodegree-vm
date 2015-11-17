@@ -53,14 +53,20 @@ document.addEventListener("WebComponentsReady", function() {
   eventListener.eShowPokemon = function(event) {
     var pokemonId = $(event.target).closest("tr").attr("pokemon-id");
     var dialog = document.querySelector("pokemon-info");
+    var user_email = null;
+    if (document.querySelector("google-signin").signedIn) {
+      user_email = gapi.auth2.getAuthInstance().currentUser.get().zt.po;
+    }
     $.ajax("/v1/pokemon", {
       method: "GET",
       data: {
-        id: pokemonId
+        id: pokemonId,
+        user_email: user_email
       },
 
       success: function(data) {
         dialog.selected = "info";
+        dialog.authorized = data.authorized;
         dialog.pokemon = data.pokemon;
         dialog.open();
       },
