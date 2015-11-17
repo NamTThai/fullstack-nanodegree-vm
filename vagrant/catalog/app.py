@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify
 from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
 from db_setup import Base, Type, Pokemon
-import json
+import urllib2
+import re
 
 app = Flask(__name__, static_url_path='')
 
@@ -74,6 +75,24 @@ def modify():
         session.add(pokemon)
         session.commit()
         return jsonify(pokemon=pokemon.getJSON())
+    else:
+        regex_url = re.compile(r"^https?:")
+        regex_image = re.compile(r".(jpg|png|gif)$")
+        img_url = request.form['img_url']
+        if (not regex_url.match(img_url)) or (not regex_image.match(img_url)):
+            return jsonify(message="Invalid Image URL, Pokedex only accepts jpg, png or gif"), 400
+        try:
+            urllib2.urlopen(img_url)
+        except (ValueError, urllib2.HTTPError, urllib2.URLError):
+            return jsonify(message="Invalid Image URL"), 400
+
+        type = request.form['type']
+        typeId = session.query(Type).filter_by(name=type).one()
+        newPokemon = Pokemon(name=request.form['name'], type=typeId,
+                             img_url=img_url, description=request.form['description'])
+        session.add(newPokemon)
+        session.commit()
+        return jsonify(id=newPokemon.id)
 
 
 @app.route('/v1/pokemon')

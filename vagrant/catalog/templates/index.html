@@ -59,6 +59,10 @@
       <paper-scroll-header-panel main condenses keep-condensed-header on-paper-header-transform="eHeaderTransform">
         <paper-toolbar id="mainToolbar" class="tall">
           <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+          <div class="row">
+            <span class="flex"></span>
+            <paper-icon-button icon="add" on-tap="eAddPokemon"></paper-icon-button>
+          </div>
           <div class="middle middle-container center horizontal layout">
             <span class="app-name">Pokedex</span>
           </div>
@@ -67,7 +71,7 @@
           </div>
         </paper-toolbar>
         <div class="content">
-          <iron-pages attr-for-selected="data-route" selected={{route}}>
+          <iron-pages id="typeSection" attr-for-selected="data-route" selected={{route}}>
             <section data-route="latest_item">
               <paper-toolbar class="drawer-toolbar">
                 <span class="toolbar-header">Latest Entries</span>

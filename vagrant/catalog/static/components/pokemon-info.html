@@ -75,7 +75,26 @@
         </section>
 
         <section data-route="add">
-
+          <div class="row">
+            <h3>Add Pokemon</h3>
+          </div>
+          <form id="addForm" is="iron-form" method="put">
+            <paper-input name="name" label="Name"></paper-input>
+            <paper-dropdown-menu name="type" label="Type">
+              <paper-menu class="dropdown-content" attr-for-selected="type" selected="[[defaultType]]">
+                <template is="dom-repeat" items="[[types]]">
+                  <paper-item type="[[item]]">[[item]]</paper-item>
+                </template>
+              </paper-menu>
+            </paper-dropdown-menu>
+            <paper-input name="img_url" label="Image URL"></paper-input>
+            <paper-textarea name="description" label="Description"></paper-textarea>
+          </form>
+          <div class="row">
+            <span class="flex"></span>
+            <paper-button dialog-dismiss>Cancel</paper-button>
+            <paper-button autofocus on-click="eRequestAdd">Add</paper-button>
+          </div>
         </section>
       </iron-pages>
     </paper-dialog>
@@ -87,6 +106,8 @@
     is: "pokemon-info",
 
     properties: {
+      defaultType: String,
+
       pokemon: Object,
 
       selected: {
@@ -119,6 +140,52 @@
       this.selected = "info";
     },
 
+    eRequestAdd: function() {
+      var formData = this.$.addForm.serialize();
+      var polymer = this;
+      $.ajax("/modify", {
+        method: "PUT",
+        data: formData,
+        success: function(data) {
+          polymer.$.dialog.close();
+          var row = document.createElement("tr");
+          row.setAttribute("class", "pointer entry");
+          row.setAttribute("pokemon-id", data.id.toString());
+          var eventListener = document.querySelector("#eventListener");
+          row.addEventListener("click", eventListener.eShowPokemon);
+          var cell = document.createElement("td");
+          var icon = document.createElement("iron-image");
+          icon.setAttribute("sizing", "cover");
+          icon.setAttribute("src", formData.img_url);
+          icon.setAttribute("preload", true);
+          icon.setAttribute("fade", true);
+          icon.setAttribute("width", 48);
+          icon.setAttribute("height", 48);
+          cell.appendChild(icon);
+          row.appendChild(cell);
+          cell = document.createElement("td");
+          $(cell).html(formData.name);
+          row.appendChild(cell);
+          cell = document.createElement("td");
+          $(cell).html(formData.type);
+          row.appendChild(cell);
+          cell = document.createElement("td");
+          cell.setAttribute("class", "overflow-hidden");
+          $(cell).html(formData.description);
+          row.appendChild(cell);
+          rowInLatestItem = row.cloneNode(true);
+
+          $('section[data-route="latest_item"] table').prepend(rowInLatestItem);
+          $('section[data-route="' + formData.type + '"] table').append(row);
+        },
+
+        error: function(error) {
+          polymer.selected = "error";
+          polymer.error = error.message !== undefined ? error.message : JSON.stringify(error);
+        }
+      });
+    },
+
     eRequestDelete: function() {
       var polymer = this;
       $.ajax("/modify", {
@@ -137,7 +204,7 @@
 
         error: function(error) {
           polymer.selected = "error";
-          polymer.error = error.message;
+          polymer.error = error.message !== undefined ? error.message : JSON.stringify(error);
         }
       });
     },
@@ -172,7 +239,7 @@
 
         error: function(error) {
           polymer.selected = "error";
-          polymer.error = JSON.stringify(error);
+          polymer.error = error.message !== undefined ? error.message : JSON.stringify(error);
         }
       });
     },

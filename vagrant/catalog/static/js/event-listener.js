@@ -1,6 +1,16 @@
 document.addEventListener("WebComponentsReady", function() {
   var eventListener = document.querySelector("#eventListener");
 
+  eventListener.eAddPokemon = function() {
+    var dialog = document.querySelector("pokemon-info");
+    dialog.selected = "add";
+    var currentSection = document.querySelector("#typeSection").selected;
+    if (currentSection != "latest_item") {
+      dialog.defaultType = currentSection;
+    }
+    dialog.open();
+  };
+
   eventListener.eDrawerItemClick = function(event) {
     var drawer = document.querySelector(".drawer-panel");
     if (drawer.narrow) {
