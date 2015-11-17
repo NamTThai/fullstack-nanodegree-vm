@@ -181,7 +181,7 @@
 
         error: function(error) {
           polymer.selected = "error";
-          polymer.error = error.message !== undefined ? error.message : JSON.stringify(error);
+          polymer.error = error.responseJSON.message !== undefined ? error.responseJSON.message : error.responseText;
         }
       });
     },
@@ -204,7 +204,7 @@
 
         error: function(error) {
           polymer.selected = "error";
-          polymer.error = error.message !== undefined ? error.message : JSON.stringify(error);
+          polymer.error = error.responseJSON.message !== undefined ? error.responseJSON.message : error.responseText;
         }
       });
     },
@@ -239,7 +239,7 @@
 
         error: function(error) {
           polymer.selected = "error";
-          polymer.error = error.message !== undefined ? error.message : JSON.stringify(error);
+          polymer.error = error.responseJSON.message !== undefined ? error.responseJSON.message : error.responseText;
         }
       });
     },
@@ -249,7 +249,12 @@
     },
 
     open: function() {
-      this.$.dialog.open();
+      var dialog = this.$.dialog;
+      dialog.open();
+      dialog.addEventListener("iron-overlay-opened", function() {
+        dialog.center();
+        dialog.removeEventListener("iron-overlay-opened");
+      });
     }
   });
 </script>

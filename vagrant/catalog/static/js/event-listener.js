@@ -39,6 +39,11 @@ document.addEventListener("WebComponentsReady", function() {
     Polymer.Base.transform('scale(' + scaleMiddle + ') translateZ(0)', appName);
   };
 
+  eventListener.eLogin = function() {
+    var loginDialog = document.querySelector("login-dialog");
+    loginDialog.open();
+  };
+
   eventListener.eShowPokemon = function(event) {
     var pokemonId = $(event.target).closest("tr").attr("pokemon-id");
     var dialog = document.querySelector("pokemon-info");

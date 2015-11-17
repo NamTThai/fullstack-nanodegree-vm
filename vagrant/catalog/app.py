@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, jsonify, make_response
+from flask import session as login_session
+import random
+import string
 from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
 from db_setup import Base, Type, Pokemon
 import urllib2
-import re
 from datetime import datetime
 
 app = Flask(__name__, static_url_path='')
@@ -41,6 +43,13 @@ def mainRender(route):
         'index.html', types=types, latestEntries=latestEntries, route=route)
 
 
+@app.route('/login')
+def showLogin():
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+    login_session["state"] = state
+    return jsonify(state=state)
+
+
 @app.route('/modify', methods=['DELETE', 'PUT', 'POST'])
 def modify():
     if request.method == 'DELETE':
@@ -50,27 +59,27 @@ def modify():
         session.commit()
         return jsonify(id=pokemonId)
     elif request.method == 'POST':
+        img_url = request.form['img_url']
+        if not verifyImage(img_url):
+            return jsonify(message="Invalid Image URL or Image Type, "
+                           "Pokedex only accepts jpg, png or gif"), 400
         pokemonId = request.form['id']
         pokemon = session.query(Pokemon).filter_by(id=pokemonId).one()
         pokemon.name = request.form['name']
         type = request.form['type']
         typeId = session.query(Type).filter_by(name=type).one().id
         pokemon.type_id = typeId
-        pokemon.img_url = request.form['img_url']
+        pokemon.img_url = img_url
         pokemon.description = request.form['description']
         session.add(pokemon)
         session.commit()
         return jsonify(pokemon=pokemon.getJSON())
     else:
-        regex_url = re.compile(r"^https?:")
-        regex_image = re.compile(r".(jpg|png|gif)$")
         img_url = request.form['img_url']
-        if (not regex_url.match(img_url)) or (not regex_image.match(img_url)):
-            return jsonify(message="Invalid Image URL, Pokedex only accepts jpg, png or gif"), 400
-        try:
-            urllib2.urlopen(img_url)
-        except (ValueError, urllib2.HTTPError, urllib2.URLError):
-            return jsonify(message="Invalid Image URL"), 400
+        isImage = verifyImage(img_url)
+        if not isImage:
+            return jsonify(message="Invalid Image URL or Image Type, "
+                           "Pokedex only accepts jpg, png or gif"), 400
 
         type = request.form['type']
         typeId = session.query(Type).filter_by(name=type).one()
@@ -79,6 +88,19 @@ def modify():
         session.add(newPokemon)
         session.commit()
         return jsonify(id=newPokemon.id)
+
+
+def verifyImage(img_url):
+    img_url = request.form['img_url']
+    prefix = img_url.startswith(('http:', 'https:'))
+    suffix = img_url.endswith(('.jpg', '.png', '.gif'))
+    if (not prefix) or (not suffix):
+        return False
+    try:
+        urllib2.urlopen(img_url)
+        return True
+    except (ValueError, urllib2.HTTPError, urllib2.URLError):
+        return False
 
 
 @app.route('/v1/pokemon')

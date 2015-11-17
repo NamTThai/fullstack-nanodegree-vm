@@ -38,6 +38,7 @@
   <link rel="stylesheet" href="css/fw-layout.css">
   <link rel="stylesheet" href="css/fw-template.css">
   <link rel="import" href="css/custom-style.html">
+  <link rel="import" href="components/login-dialog.html">
   <link rel="import" href="components/pokemon-info.html">
   <script src="js/event-listener.js"></script>
   <script src="js/ready.js"></script>
@@ -62,6 +63,7 @@
           <div class="row">
             <span class="flex"></span>
             <paper-icon-button icon="add" on-tap="eAddPokemon"></paper-icon-button>
+            <paper-icon-button icon="account-circle" on-tap="eLogin"></paper-icon-button>
           </div>
           <div class="middle middle-container center horizontal layout">
             <span class="app-name">Pokedex</span>
@@ -113,6 +115,7 @@
       </paper-scroll-header-panel>
     </paper-drawer-panel>
     <pokemon-info></pokemon-info>
+    <login-dialog></login-dialog>
   </template>
 </body>
 </html>
