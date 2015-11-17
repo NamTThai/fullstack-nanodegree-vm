@@ -18,6 +18,7 @@
   <link rel="stylesheet" src="http://normalize-css.googlecode.com/svn/trunk/normalize.css">
 
   <script>
+    // Store state token from the server into a global variable
     window.sessionState = "{{state}}";
   </script>
 
@@ -45,12 +46,13 @@
   <link rel="import" href="css/custom-style.html">
   <link rel="import" href="components/pokemon-info.html">
   <script src="js/event-listener.js"></script>
-  <script src="js/ready.js"></script>
 
 </head>
 <body class="fullbleed layout vertical">
   <template id="eventListener" is="dom-bind">
     <paper-drawer-panel class="drawer-panel">
+
+      <!-- Control which section appears on main page -->
       <div drawer>
         <paper-toolbar class="drawer-toolbar">
           <span class="drawer-toolbar-menu">Types</span>
@@ -61,6 +63,7 @@
           {% endfor %}
         </paper-menu>
       </div>
+      
       <paper-scroll-header-panel main condenses keep-condensed-header on-paper-header-transform="eHeaderTransform">
         <paper-toolbar id="mainToolbar" class="tall">
           <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
@@ -78,6 +81,8 @@
         </paper-toolbar>
         <div class="content">
           <iron-pages id="typeSection" attr-for-selected="data-route" selected={{route}}>
+
+            <!-- Latest Items section: default section on main page -->
             <section data-route="latest_item">
               <paper-toolbar class="drawer-toolbar">
                 <span class="toolbar-header">Latest Entries</span>
@@ -95,6 +100,8 @@
                 {% endfor %}
               </table>
             </section>
+
+            <!-- Type related sections -->
             {% for i in types %}
             <section data-route="{{i.name}}">
               <paper-toolbar class="drawer-toolbar">
@@ -114,6 +121,7 @@
               </table>
             </section>
             {% endfor %}
+
           </iron-pages>
         </div>
       </paper-scroll-header-panel>

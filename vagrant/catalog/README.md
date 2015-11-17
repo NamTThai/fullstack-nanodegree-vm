@@ -9,16 +9,13 @@ If you are reading this document, that means you have made it to 12 years of lif
 1. Navigate to `/vagrant/catalog` on the virtual machine
 1. `bower install`
 1. Run `python db_setup.py`
+1. Run `python app.py` to launch Pokedex local server
+1. Browse `localhost:5000` to access your Pokedex
 
-## Basic Features
+## Features
 1. Your awesome gadget comes with 51 commonly found Pokemons!
-1. Store player information (full name) in database, subjecting to deletion and modification
-1. Store match information (participants, outcome) in database, subjecting to deletion and modification
-1. Retrieve player standings
-1. Generate pairings for each round
-
-## Extra Features
-1. Draw is possible
-1. If there are odd number of players, one player will have automatic win each round (walkover). No two players' number of walkovers can be different by 2.
-1. There is no rematch between two players until both players have played against all other players
-1. When two players have the same number of wins, they are ranked according to OMW (Opponent Match Wins), the total number of wins by players they have played against
+1. View Pokemon entries, including their name, captured picture, typing and description
+1. Document new Pokemon entry whenever you encounter one in the wild
+1. Modify and delete entry that you have created
+1. If you encounter a new Pokemon that might be of undiscovered Type, don't hesitate to contact us! We'll verify whether he/she is indeed of new Type and update Type list for you.
+1. Browse `localhost:5000/rss` to access a RSS feed of latest Pokedex entries.

@@ -1,6 +1,9 @@
 document.addEventListener("WebComponentsReady", function() {
   var eventListener = document.querySelector("#eventListener");
 
+  // When user click on a button to add new pokemon. Verify whether user has
+  // signed in. If he/she signed in, opens Add Pokemon dialog; otherwise,
+  // request user to sign in
   eventListener.eAddPokemon = function() {
     var gSignin = document.querySelector("google-signin");
     var dialog = document.querySelector("pokemon-info");
@@ -16,6 +19,7 @@ document.addEventListener("WebComponentsReady", function() {
     dialog.open();
   };
 
+  // Display the correct section when user clicks on left drawer panel
   eventListener.eDrawerItemClick = function(event) {
     var drawer = document.querySelector(".drawer-panel");
     if (drawer.narrow) {
@@ -29,6 +33,7 @@ document.addEventListener("WebComponentsReady", function() {
     ironPage.select(route);
   };
 
+  // Minimize header as user scroll down
   eventListener.eHeaderTransform = function(event) {
     var appName = document.querySelector('#mainToolbar .app-name');
     var middleContainer = document.querySelector('#mainToolbar .middle-container');
@@ -44,12 +49,14 @@ document.addEventListener("WebComponentsReady", function() {
     Polymer.Base.transform('scale(' + scaleMiddle + ') translateZ(0)', appName);
   };
 
+  // Open signin dialog when user clicks on signin button
   eventListener.eLogin = function() {
     var dialog = document.querySelector("pokemon-info");
     dialog.selected = "signin";
     dialog.open();
   };
 
+  // Open Pokemon info dialog when user clicks on Pokedex entry
   eventListener.eShowPokemon = function(event) {
     var pokemonId = $(event.target).closest("tr").attr("pokemon-id");
     var dialog = document.querySelector("pokemon-info");

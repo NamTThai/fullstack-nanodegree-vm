@@ -61,6 +61,8 @@ class Pokemon(Base):
     user = relationship(User)
 
     def getIconUrl(self):
+        """If the image url is from serebii.net, there will be a corresponding
+        icon url"""
         if string.find(self.img_url, "serebii") > -1:
             self.icon_url = string.replace(self.img_url, "xy/pokemon", "pokedex-xy/icon")
         else:
@@ -68,6 +70,7 @@ class Pokemon(Base):
         return self.icon_url
 
     def getJSON(self):
+        """Get JSON representation of this object"""
         return {
             "id": self.id,
             "name": self.name,
@@ -78,6 +81,7 @@ class Pokemon(Base):
         }
 
     def getUserEmail(self):
+        """Get email of creator user. None is automatically generated"""
         if self.user is None:
             return None
         else:
@@ -104,7 +108,6 @@ if __name__ == '__main__':
     # Add default pokemons
     with open('data/starter_pkm.json') as starter_data:
         starters = json.load(starter_data)
-
     for starter in starters:
         type_id = session.query(Type).filter_by(name=starter["type"]).one().id
         newEntry = Pokemon(name=starter["name"], type_id=type_id,

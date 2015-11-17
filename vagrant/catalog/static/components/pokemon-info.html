@@ -1,3 +1,4 @@
+<!-- A web component that contains all necessary dialogs: info, add, update, delete, signin -->
 <dom-module id="pokemon-info">
   <style>
     section:not([data-route="signin"]) {
@@ -17,11 +18,14 @@
   <template>
     <paper-dialog id="dialog" with-backdrop entry-animation="scale-up-animation" exit-animation="fade-out-animation">
       <iron-pages attr-for-selected="data-route" selected="{{selected}}">
+
+        <!-- Display pokemon info -->
         <section data-route="info">
           <div class="row">
             <h3>{{pokemon.name}}</h3>
             <span class="type">({{pokemon.type}})</span>
             <span class="flex"></span>
+            <!-- Show administrative actions (update, delete) is the user is authorized to do so -->
             <template is="dom-if" if=[[authorized]]>
               <paper-icon-button icon="create" on-click="eUpdate"></paper-icon-button>
               <paper-icon-button icon="clear" on-click="eDelete"></paper-icon-button>
@@ -33,10 +37,12 @@
           </div>
         </section>
 
+        <!-- Display any error -->
         <section data-route="error">
           <div>{{error}}</div>
         </section>
 
+        <!-- Delete entry control box -->
         <section data-route="delete">
           <h3>Delete Pokemon</h3>
           <div class="row">
@@ -51,6 +57,7 @@
           </div>
         </section>
 
+        <!-- Update entry control box -->
         <section data-route="update">
           <div class="row">
             <paper-icon-button icon="arrow-back" on-click="eInfo"></paper-icon-button>
@@ -72,6 +79,7 @@
           </form>
         </section>
 
+        <!-- Add entry control box -->
         <section data-route="add">
           <div class="row">
             <h3>Add Pokemon</h3>
@@ -95,6 +103,7 @@
           </div>
         </section>
 
+        <!-- Signin control box -->
         <section data-route="signin">
           <google-signin client-id="369330850632-f83452bg5sk33m76a18mkf27jg5gkhjg.apps.googleusercontent.com"
             scopes="openid email" offline
@@ -115,30 +124,32 @@
     },
 
     properties: {
+      // Whether the user is authorized to perform administrative actions (update, delete)
       authorized: {
         type: Boolean,
         value: false
       },
 
+      // Automatically popular "Type" formdata in Add Pokemon section
       defaultType: String,
 
+      // Data binding object for Pokemon info section
       pokemon: Object,
 
+      // Current section
       selected: {
         type: String,
         value: "info"
       },
 
+      // All available types
       types: Array,
-
-      _authenticating: {
-        type: Boolean,
-        value: false
-      }
     },
 
+    // Call when the web component is loaded and bound to document
     ready: function() {
       var polymer = this;
+      // Get all available types
       $.ajax("/v1/types", {
         method: "GET",
         success: function(data) {
@@ -151,14 +162,17 @@
       })
     },
 
+    // Switch to delete section
     eDelete: function() {
       this.selected = "delete";
     },
 
+    // Switch to info section
     eInfo: function() {
       this.selected = "info";
     },
 
+    // Send a PUT request to add new entry
     eRequestAdd: function() {
       var formData = this.$.addForm.serialize();
       var polymer = this;
@@ -168,6 +182,9 @@
         data: formData,
         success: function(data) {
           polymer.$.dialog.close();
+
+          // Request success, generates 2 new rows and add them to Latest Items
+          // section as well as corresponding Type section
           var row = document.createElement("tr");
           row.setAttribute("class", "pointer entry");
           row.setAttribute("pokemon-id", data.id.toString());
@@ -207,6 +224,7 @@
       });
     },
 
+    // Send a DELETE request to delete old entry
     eRequestDelete: function() {
       var polymer = this;
       var data = {id: this.pokemon.id};
@@ -215,6 +233,7 @@
         method: "DELETE",
         data: data,
         success: function(data) {
+          // Request success, delete corresponding rows in pokedex
           var displayRows = document.querySelectorAll('tr[pokemon-id="' + data.id + '"]');
           for (var i = 0; i < displayRows.length; i++) {
             var row = displayRows[i];
@@ -230,6 +249,7 @@
       });
     },
 
+    // Send a POST request to update old entry
     eRequestUpdate: function() {
       var data = this.$.updateForm.serialize();
       data.id = this.pokemon.id;
@@ -239,6 +259,8 @@
         method: "POST",
         data: data,
         success: function(data) {
+          // Request success, redirect user to info section and update information
+          // in info section as well as general pokedex
           polymer.pokemon = data.pokemon;
           polymer.selected = "info";
           var displayRows = document.querySelectorAll('tr[pokemon-id="' + data.pokemon.id + '"]');
@@ -266,20 +288,25 @@
       });
     },
 
+    // Callback when user signs in successfully, display an Add pokemon button
+    // allowing user to add new entry
     eSignedIn: function() {
       document.querySelector("#addPokemon").style.display = "block";
       this.$.dialog.close();
     },
 
+    // Callback when user signs out successfully, hide the Add pokemon button
     eSignedOut: function(event) {
       document.querySelector("#addPokemon").style.display = "none";
       this.$.dialog.close();
     },
 
+    // Switch to update section
     eUpdate: function() {
       this.selected = "update";
     },
 
+    // Open current dialog, re-center it on screen
     open: function() {
       var dialog = this.$.dialog;
       dialog.open();
@@ -289,6 +316,8 @@
       });
     },
 
+    // Add session informaion, namely session state, access token, user id and
+    // user email, to a data object that is intended to be sent to the server
     _appendUserInfo(object) {
       if (!this.$$('google-signin').signedIn) {
         return;
