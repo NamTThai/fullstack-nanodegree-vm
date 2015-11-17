@@ -54,17 +54,33 @@ def mainRender(route):
         'index.html', types=types, latestEntries=latestEntries, route=route)
 
 
-@app.route('/pokemon')
-def pokemonInfo():
+@app.route('/modify', methods=['DELETE', 'PUT', 'POST'])
+def modify():
+    if request.method == 'DELETE':
+        pokemonId = request.form['id']
+        pokemon = session.query(Pokemon).filter_by(id=pokemonId).one()
+        session.delete(pokemon)
+        session.commit()
+        return jsonify(id=pokemonId)
+
+
+@app.route('/v1/pokemon')
+def pokemonInfoV1():
     pokemonId = request.args.get('id')
     if pokemonId is None:
-        return json.dumps({"error": "No pokemon ID specified"}), 404
+        return jsonify(error="No pokemon ID specified"), 404
     else:
         pokemons = session.query(Pokemon).filter_by(id=pokemonId).all()
         if (len(pokemons) != 1):
-            return json.dumps({"error": "No pokemon ID specified"}), 404
+            return jsonify(error="No pokemon ID specified"), 404
         else:
-            return json.dumps({"pokemon": pokemons[0].getJSON()})
+            return jsonify(pokemon=pokemons[0].getJSON())
+
+
+@app.route('/v1/types')
+def typesV1():
+    types = session.query(Type).all()
+    return jsonify(types=[t.name for t in types])
 
 
 @app.route('/Types/<int:Type_id>/new', methods=['GET', 'POST'])

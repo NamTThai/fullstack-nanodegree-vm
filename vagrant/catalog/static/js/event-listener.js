@@ -32,7 +32,7 @@ document.addEventListener("WebComponentsReady", function() {
   eventListener.eShowPokemon = function(event) {
     var pokemonId = $(event.target).closest("tr").attr("pokemon-id");
     var dialog = document.querySelector("pokemon-info");
-    $.ajax("/pokemon", {
+    $.ajax("/v1/pokemon", {
       method: "GET",
       data: {
         id: pokemonId
@@ -40,12 +40,13 @@ document.addEventListener("WebComponentsReady", function() {
 
       success: function(data) {
         dialog.selected = "info";
-        dialog.pokemon = JSON.parse(JSON.parse(data).pokemon);
+        dialog.pokemon = data.pokemon;
         dialog.open();
       },
 
       error: function(error) {
         dialog.selected = "error";
+        dialog.error = "Nothing found";
         dialog.open();
       }
     });

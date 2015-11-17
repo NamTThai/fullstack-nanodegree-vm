@@ -1,12 +1,16 @@
 <dom-module id="pokemon-info">
   <style>
     paper-dialog {
-      max-width: 500px;
+      width: 500px;
     }
 
     .type {
       padding: 0 0 0 12px;
       font-style: italic;
+    }
+
+    .center-horizontal {
+      margin: auto;
     }
   </style>
 
@@ -17,21 +21,57 @@
           <div class="row">
             <h3>{{pokemon.name}}</h3>
             <span class="type">({{pokemon.type}})</span>
+            <span class="flex"></span>
+            <paper-icon-button icon="create" on-click="eUpdate"></paper-icon-button>
+            <paper-icon-button icon="clear" on-click="eDelete"></paper-icon-button>
           </div>
           <div class="row">
             <iron-image class="col-4" sizing="contain" src="{{pokemon.img_url}}" preload fade width=120 height=120></iron-image>
             <div class="col-8">{{pokemon.description}}</div>
           </div>
+          <div class="row">
+            <span class="flex"></span>
+            <paper-button dialog-confirm autofocus>OK</paper-button>
+          </div>
         </section>
+
         <section data-route="error">
-          <div>Nothing Found!</div>
+          <div>{{error}}</div>
         </section>
+
         <section data-route="delete">
-
+          <h3>Delete Pokemon</h3>
+          <div class="row">
+            <iron-image class="col-4" sizing="contain" src="{{pokemon.img_url}}" preload fade width=120 height=120></iron-image>
+            <div>
+              <h4 class="center-horizontal">Are you sure?</div>
+              <div class="center-horizontal">
+                <paper-button on-click="eInfo">Cancel</paper-button>
+                <paper-button on-click="eRequestDelete">Delete</paper-button>
+              </div>
+            </div>
+          </div>
         </section>
+
         <section data-route="update">
-
+          <div class="row">
+            <paper-icon-button icon="arrow-back" on-click="eInfo"></paper-icon-button>
+            <h3>Update Pokemon</h3>
+            <span class="flex"></span>
+            <paper-icon-button icon="save"></paper-icon-button>
+          </div>
+          <paper-input label="Name" value="[[pokemon.name]]"></paper-input>
+          <paper-dropdown-menu label="Type">
+            <paper-menu class="dropdown-content" attr-for-selected="type" selected="[[pokemon.type]]">
+              <template is="dom-repeat" items="[[types]]">
+                <paper-item type="[[item]]">[[item]]</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+          <paper-input label="Image URL" value="[[pokemon.img_url]]"></paper-input>
+          <paper-textarea label="Description" value="[[pokemon.description]]"></paper-textarea>
         </section>
+
         <section data-route="add">
 
         </section>
@@ -50,7 +90,58 @@
       selected: {
         type: String,
         value: "info"
-      }
+      },
+
+      types: Array
+    },
+
+    ready: function() {
+      var polymer = this;
+      $.ajax("/v1/types", {
+        method: "GET",
+        success: function(data) {
+          polymer.types = data.types;
+        },
+
+        error: function(error) {
+          polymer.types = [];
+        }
+      })
+    },
+
+    eDelete: function() {
+      this.selected = "delete";
+    },
+
+    eInfo: function() {
+      this.selected = "info";
+    },
+
+    eRequestDelete: function() {
+      var polymer = this;
+      $.ajax("/modify", {
+        method: "DELETE",
+        data: {
+          id: polymer.pokemon.id
+        },
+        success: function(data) {
+          var displayRows = document.querySelectorAll('tr[pokemon-id="' + data.id + '"]');
+          for (var i = 0; i < displayRows.length; i++) {
+            var row = displayRows[i];
+            row.parentNode.removeChild(row);
+          }
+          polymer.$.dialog.close();
+        },
+
+        error: function(error) {
+          polymer.selected = "error";
+          polymer.error = error.message;
+        }
+      });
+    },
+
+    eUpdate: function() {
+      this.selected = "update";
     },
 
     open: function() {

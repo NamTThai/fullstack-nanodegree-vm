@@ -1,6 +1,6 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, sessionmaker, backref
+from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.sql import func
 from sqlalchemy import create_engine
 import json
@@ -52,12 +52,13 @@ class Pokemon(Base):
         return self.icon_url
 
     def getJSON(self):
-        return json.dumps({
+        return {
+            "id": self.id,
             "name": self.name,
             "type": self.type.name,
             "description": self.description,
             "img_url": self.img_url
-        })
+        }
 
 
 engine = create_engine('sqlite:///catalog.db')
