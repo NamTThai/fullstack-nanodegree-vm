@@ -1,6 +1,6 @@
 <dom-module id="pokemon-info">
   <style>
-    paper-dialog {
+    section:not([data-route="signin"]) {
       width: 500px;
     }
 
@@ -15,7 +15,7 @@
   </style>
 
   <template>
-    <paper-dialog id="dialog" modal entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+    <paper-dialog id="dialog" with-backdrop entry-animation="scale-up-animation" exit-animation="fade-out-animation">
       <iron-pages attr-for-selected="data-route" selected="{{selected}}">
         <section data-route="info">
           <div class="row">
@@ -28,10 +28,6 @@
           <div class="row">
             <iron-image class="col-4" sizing="contain" src="{{pokemon.img_url}}" preload fade width=120 height=120></iron-image>
             <div class="col-8">{{pokemon.description}}</div>
-          </div>
-          <div class="row">
-            <span class="flex"></span>
-            <paper-button dialog-confirm autofocus>OK</paper-button>
           </div>
         </section>
 
@@ -96,6 +92,12 @@
             <paper-button autofocus on-click="eRequestAdd">Add</paper-button>
           </div>
         </section>
+
+        <section data-route="signin">
+          <google-signin client-id="369330850632-f83452bg5sk33m76a18mkf27jg5gkhjg.apps.googleusercontent.com"
+            scopes="openid email" offline
+          ></google-signin>
+        </section>
       </iron-pages>
     </paper-dialog>
   </template>
@@ -104,6 +106,11 @@
 <script>
   Polymer({
     is: "pokemon-info",
+
+    listeners: {
+      "google-signin-success": "eSignedIn",
+      "google-signed-out": "eSignedOut"
+    },
 
     properties: {
       defaultType: String,
@@ -115,7 +122,12 @@
         value: "info"
       },
 
-      types: Array
+      types: Array,
+
+      _authenticating: {
+        type: Boolean,
+        value: false
+      }
     },
 
     ready: function() {
@@ -143,6 +155,7 @@
     eRequestAdd: function() {
       var formData = this.$.addForm.serialize();
       var polymer = this;
+      this._appendUserInfo(formData);
       $.ajax("/modify", {
         method: "PUT",
         data: formData,
@@ -174,6 +187,7 @@
           $(cell).html(formData.description);
           row.appendChild(cell);
           rowInLatestItem = row.cloneNode(true);
+          rowInLatestItem.addEventListener("click", eventListener.eShowPokemon);
 
           $('section[data-route="latest_item"] table').prepend(rowInLatestItem);
           $('section[data-route="' + formData.type + '"] table').append(row);
@@ -188,11 +202,11 @@
 
     eRequestDelete: function() {
       var polymer = this;
+      var data = {id: this.pokemon.id};
+      this._appendUserInfo(data);
       $.ajax("/modify", {
         method: "DELETE",
-        data: {
-          id: polymer.pokemon.id
-        },
+        data: data,
         success: function(data) {
           var displayRows = document.querySelectorAll('tr[pokemon-id="' + data.id + '"]');
           for (var i = 0; i < displayRows.length; i++) {
@@ -212,6 +226,7 @@
     eRequestUpdate: function() {
       var data = this.$.updateForm.serialize();
       data.id = this.pokemon.id;
+      this._appendUserInfo(data);
       var polymer = this;
       $.ajax("/modify", {
         method: "POST",
@@ -244,6 +259,16 @@
       });
     },
 
+    eSignedIn: function() {
+      document.querySelector("#addPokemon").style.display = "block";
+      this.$.dialog.close();
+    },
+
+    eSignedOut: function(event) {
+      document.querySelector("#addPokemon").style.display = "none";
+      this.$.dialog.close();
+    },
+
     eUpdate: function() {
       this.selected = "update";
     },
@@ -255,6 +280,17 @@
         dialog.center();
         dialog.removeEventListener("iron-overlay-opened");
       });
+    },
+
+    _appendUserInfo(object) {
+      if (!this.$$('google-signin').signedIn) {
+        return;
+      }
+      var userInfo = gapi.auth2.getAuthInstance().currentUser.get();
+      object.state = window.sessionState;
+      object.access_token = userInfo.po.access_token;
+      object.user_id = userInfo.El;
+      object.user_email = userInfo.zt.po;
     }
   });
 </script>

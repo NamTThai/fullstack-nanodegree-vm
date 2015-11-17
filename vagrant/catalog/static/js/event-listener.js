@@ -2,11 +2,16 @@ document.addEventListener("WebComponentsReady", function() {
   var eventListener = document.querySelector("#eventListener");
 
   eventListener.eAddPokemon = function() {
+    var gSignin = document.querySelector("google-signin");
     var dialog = document.querySelector("pokemon-info");
-    dialog.selected = "add";
-    var currentSection = document.querySelector("#typeSection").selected;
-    if (currentSection != "latest_item") {
-      dialog.defaultType = currentSection;
+    if (gSignin.signedIn) {
+      dialog.selected = "add";
+      var currentSection = document.querySelector("#typeSection").selected;
+      if (currentSection != "latest_item") {
+        dialog.defaultType = currentSection;
+      }
+    } else {
+      dialog.selected = "signin";
     }
     dialog.open();
   };
@@ -40,8 +45,9 @@ document.addEventListener("WebComponentsReady", function() {
   };
 
   eventListener.eLogin = function() {
-    var loginDialog = document.querySelector("login-dialog");
-    loginDialog.open();
+    var dialog = document.querySelector("pokemon-info");
+    dialog.selected = "signin";
+    dialog.open();
   };
 
   eventListener.eShowPokemon = function(event) {

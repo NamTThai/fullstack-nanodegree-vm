@@ -25,3 +25,7 @@ body {
 td {
   padding: 0 24px 0 24px;
 }
+
+#addPokemon {
+  display: none;
+}
