@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+<channel>
+ <title>Latest Pokedex Entries</title>
+ <description>Newest documented encounters by awesome trainers from all over the world!</description>
+ <link>{{url_for('main', _external=True)}}</link>
+ <lastBuildDate>{{lastBuildDate}}</lastBuildDate>
+ <ttl>1800</ttl>
+
+ {% for i in entries %}
+ <item>
+  <title>{{i.name}}</title>
+  <description>{{i.description}}</description>
+  <link>{{url_for('pokemonInfo', id=i.id, _external=True)}}</link>
+  <guid isPermaLink="true">{{i.id}}</guid>
+  <pubDate>{{i.date_entered}}</pubDate>
+ </item>
+ {% endfor %}
+
+</channel>
+</rss>
