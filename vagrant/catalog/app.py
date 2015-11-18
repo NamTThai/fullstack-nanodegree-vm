@@ -19,7 +19,8 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-CLIENT_ID = json.loads(open('data/client_secret.json', 'r').read())['web']['client_id']
+CLIENT_ID = json.loads(open('data/client_secret.json', 'r').read())
+CLIENT_ID = CLIENT_ID['web']['client_id']
 
 
 @app.route('/')
@@ -48,12 +49,16 @@ def mainRender(route):
     """Render main page with a state token for current session, and all contents
     to be displayed on main page
     """
-    state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+    state = ''
+    for x in xrange(32):
+        state += random.choice(string.ascii_uppercase + string.digits)
     user_session["state"] = state
     types = session.query(Type).all()
-    latestEntries = session.query(Pokemon).order_by(desc(Pokemon.date_entered)).limit(20)
+    latestEntries = session.query(Pokemon)\
+        .order_by(desc(Pokemon.date_entered)).limit(20)
     return render_template(
-        'index.html', types=types, latestEntries=latestEntries, route=route, state=state)
+        'index.html', types=types, latestEntries=latestEntries,
+        route=route, state=state)
 
 
 @app.route('/favicon.ico')
@@ -68,7 +73,8 @@ def verifyAccessToken(state, access_token, user_id):
     if state != user_session['state']:
         return False
     # Check if the provided access token is valid
-    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' % access_token)
+    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
+           % access_token)
     http = httplib2.Http()
     result = json.loads(http.request(url, 'GET')[1])
     if result.get('error') is not None:
@@ -85,7 +91,8 @@ def verifyAccessToken(state, access_token, user_id):
 
 @app.route('/modify', methods=['DELETE', 'PUT', 'POST'])
 def modify():
-    """API Endpoint that performs all administrative actions (add, update, delete)
+    """API Endpoint that performs all administrative actions (add, update,
+    delete)
     """
 
     # Add user to database if not already exists
@@ -98,20 +105,25 @@ def modify():
         print(user.id)
 
     # Verify if the user is authenticated
-    if not verifyAccessToken(request.form['state'], request.form['access_token'], request.form['user_id']):
+    if not verifyAccessToken(request.form['state'],
+                             request.form['access_token'],
+                             request.form['user_id']):
         return jsonify(message="Unable to verify user login information"), 400
 
     # Respond to DELETE request to delete entry
     elif request.method == 'DELETE':
         pokemonId = request.form['id']
-        pokemon = session.query(Pokemon).filter_by(id=pokemonId, user_id=user.id).first()
+        pokemon = session.query(Pokemon).filter_by(id=pokemonId,
+                                                   user_id=user.id).first()
         # Verify if the user is authorized to delete this pokemon by id
         if pokemon is not None:
             session.delete(pokemon)
             session.commit()
             return jsonify(id=pokemonId)
         else:
-            return jsonify(message="Either that Pokemon does not exists, or you don't have the permission to delete this pokemon"), 400
+            return jsonify(message="Either that Pokemon does not exists, or you"
+                           " don't have the permission to delete"
+                           " this pokemon"), 400
 
     # Respond to POST request to update entry
     elif request.method == 'POST':
@@ -122,7 +134,8 @@ def modify():
                            "Pokedex only accepts jpg, png or gif"), 400
 
         pokemonId = request.form['id']
-        pokemon = session.query(Pokemon).filter_by(id=pokemonId, user_id=user.id).first()
+        pokemon = session.query(Pokemon).filter_by(id=pokemonId,
+                                                   user_id=user.id).first()
         # Verify if user is authorized to update this pokemon by id
         if pokemon is not None:
             pokemon.name = request.form['name']
@@ -135,7 +148,9 @@ def modify():
             session.commit()
             return jsonify(pokemon=pokemon.getJSON())
         else:
-            return jsonify(message="Either that Pokemon does not exists, or you don't have the permission to update this pokemon"), 400
+            return jsonify(message="Either that Pokemon does not exists, or you"
+                           " don't have the permission to update"
+                           " this pokemon"), 400
 
     # Respond to PUT request to add new entry
     else:
@@ -146,8 +161,9 @@ def modify():
                            "Pokedex only accepts jpg, png or gif"), 400
 
         type = session.query(Type).filter_by(name=request.form['type']).one()
-        newPokemon = Pokemon(name=request.form['name'], type=type, user_id=user.id,
-                             img_url=img_url, description=request.form['description'])
+        newPokemon = Pokemon(name=request.form['name'], type=type,
+                             user_id=user.id, img_url=img_url,
+                             description=request.form['description'])
         session.add(newPokemon)
         session.commit()
         return jsonify(id=newPokemon.id)
@@ -198,7 +214,8 @@ def types():
 def latestEntriesRss():
     """GET an RSS Feed that contains latest entries to Pokedex"""
     now = datetime.now()
-    latestEntries = session.query(Pokemon).order_by(desc(Pokemon.date_entered)).limit(20)
+    latestEntries = session.query(Pokemon).order_by(desc(Pokemon.date_entered))\
+        .limit(20)
     rss = render_template('rss.xml', lastBuildDate=now, entries=latestEntries)
     response = make_response(rss)
     response.headers["Content-Type"] = "application/xml"

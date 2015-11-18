@@ -44,7 +44,8 @@ class Pokemon(Base):
         name: item name
         category_id:  corresponding category
         description:  item description
-        user_id:  id of entry creator, can be null if the entry is automatically generated
+        user_id:  id of entry creator, can be null if the entry is
+            automatically generated
         date_entered:  when the item was entered, default to insertion time
 
     """
@@ -64,7 +65,8 @@ class Pokemon(Base):
         """If the image url is from serebii.net, there will be a corresponding
         icon url"""
         if string.find(self.img_url, "serebii") > -1:
-            self.icon_url = string.replace(self.img_url, "xy/pokemon", "pokedex-xy/icon")
+            self.icon_url = string.replace(self.img_url, "xy/pokemon",
+                                           "pokedex-xy/icon")
         else:
             self.icon_url = self.img_url
         return self.icon_url
