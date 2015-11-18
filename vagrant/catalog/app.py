@@ -140,7 +140,10 @@ def modify():
         if pokemon is not None:
             pokemon.name = request.form['name']
             type = request.form['type']
-            typeId = session.query(Type).filter_by(name=type).one().id
+            type = session.query(Type).filter_by(name=type).first()
+            if type is None:
+                return jsonify(message="This type does not exists"), 400
+            typeId = type.id
             pokemon.type_id = typeId
             pokemon.img_url = img_url
             pokemon.description = request.form['description']
@@ -160,7 +163,9 @@ def modify():
             return jsonify(message="Invalid Image URL or Image Type, "
                            "Pokedex only accepts jpg, png or gif"), 400
 
-        type = session.query(Type).filter_by(name=request.form['type']).one()
+        type = session.query(Type).filter_by(name=request.form['type']).first()
+        if type is None:
+            return jsonify(message="Invalid Type"), 400
         newPokemon = Pokemon(name=request.form['name'], type=type,
                              user_id=user.id, img_url=img_url,
                              description=request.form['description'])
