@@ -17,5 +17,6 @@ If you are reading this document, that means you have made it to 12 years of lif
 1. View Pokemon entries, including their name, captured picture, typing and description
 1. Document new Pokemon entry whenever you encounter one in the wild
 1. Modify and delete entry that you have created
-1. If you encounter a new Pokemon that might be of undiscovered Type, don't hesitate to contact us! We'll verify whether he/she is indeed of new Type and update Type list for you.
+1. If you encounter a new Pokemon that might be of undiscovered Type, don't hesitate to contact us! We'll verify whether he/she is indeed of new Type and update Type list for you. (a.k.a if this is not obvious enough, don't add new Type on your own; you will break stuff)
 1. Browse `localhost:5000/rss` to access a RSS feed of latest Pokedex entries.
+1. Added security measure to prevent CSRF
